@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Console Coffee</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #6e6d6d;
+            line-height: 1.6;
+        }
+        
+        .admin-dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            text-align: center;
+            padding: 0 1rem 2rem;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .sidebar-header h2 {
+            color: #d3ad7f;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #34495e;
+            border-left-color: #d3ad7f;
+            color: #d3ad7f;
+        }
+        
+        .sidebar-menu i {
+            margin-right: 0.5rem;
+            width: 20px;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.463);
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #7f8c8d;
+        }
+        
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card.orders .stat-icon {
+            color: #3498db;
+        }
+        
+        .stat-card.revenue .stat-icon {
+            color: #2ecc71;
+        }
+        
+        .stat-card.customers .stat-icon {
+            color: #d3ad7f;
+        }
+        
+        .stat-card.products .stat-icon {
+            color: #e67e22;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-view, .btn-edit, .btn-delete {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background 0.3s ease;
+        }
+        
+        .btn-view {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-edit {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-view:hover {
+            background: #2980b9;
+        }
+        
+        .btn-edit:hover {
+            background: #e67e22;
+        }
+        
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-mug-hot"></i> Console Coffee</h2>
+                <p>Admin Panel</p>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#orders"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+                <li><a href="#customers"><i class="fas fa-users"></i> Customers</a></li>
+                <li><a href="#products"><i class="fas fa-coffee"></i> Products</a></li>
+                <li><a href="#analytics"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                <li><a href="#settings"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header" style="width: 60%;">
+                <h1>Dashboard</h1>
+                <div class="header-actions">
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="adminUser">Admin</span>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </header>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid" style="margin-top: 75px;">
+                <div class="stat-card orders">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-number" id="totalOrders">0</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <div class="stat-card revenue">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-number" id="totalRevenue">$0</div>
+                    <div class="stat-label">Total Revenue</div>
+                </div>
+                <div class="stat-card customers">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" id="totalCustomers">0</div>
+                    <div class="stat-label">Customers</div>
+                </div>
+                <div class="stat-card products">
+                    <div class="stat-icon">
+                        <i class="fas fa-coffee"></i>
+                    </div>
+                    <div class="stat-number" id="totalProducts">6</div>
+                    <div class="stat-label">Products</div>
+                </div>
+            </div>
+
+            <!-- Recent Orders Section -->
+            <section class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Orders</h2>
+                    <button class="btn" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be populated here -->
+                        </tbody>
+                    </table>
+                    <div id="emptyOrders" class="empty-state" style="display: none;">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No orders yet</h3>
+                        <p>Orders will appear here when customers make purchases.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- User Activity Section -->
+            <section class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">User Activity</h2>
+                </div>
+                <div class="table-container">
+                    <table id="activityTable">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Activity</th>
+                                <th>Details</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityTableBody">
+                            <!-- Activity will be populated here -->
+                        </tbody>
+                    </table>
+                    <div id="emptyActivity" class="empty-state" style="display: none;">
+                        <i class="fas fa-history"></i>
+                        <h3>No user activity yet</h3>
+                        <p>User activity will appear here as customers interact with the site.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Check authentication
+        if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        // Display admin user
+        const adminUser = sessionStorage.getItem('adminUser') || 'Admin';
+        document.getElementById('adminUser').textContent = adminUser;
+
+        // Logout function
+        function logout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            sessionStorage.removeItem('adminUser');
+            window.location.href = 'admin-login.html';
+        }
+
+        // Initialize dashboard data
+        function initializeDashboard() {
+            loadOrders();
+            loadUserActivity();
+            updateStatistics();
+        }
+
+        // Load orders from localStorage
+        function loadOrders() {
+            const orders = JSON.parse(localStorage.getItem('coffeeOrders')) || [];
+            const ordersTableBody = document.getElementById('ordersTableBody');
+            const emptyOrders = document.getElementById('emptyOrders');
+
+            if (orders.length === 0) {
+                ordersTableBody.innerHTML = '';
+                emptyOrders.style.display = 'block';
+                return;
+            }
+
+            emptyOrders.style.display = 'none';
+            ordersTableBody.innerHTML = '';
+
+            orders.slice(-10).reverse().forEach((order, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>#${order.id || (orders.length - index)}</td>
+                    <td>${order.customer || 'Guest'}</td>
+                    <td>${order.items ? order.items.length : 0} items</td>
+                    <td>$${order.total ? order.total.toFixed(2) : '0.00'}</td>
+                    <td><span class="status-badge status-${order.status || 'pending'}">${order.status || 'Pending'}</span></td>
+                    <td>${order.date || new Date().toLocaleDateString()}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-view" onclick="viewOrder(${order.id || (orders.length - index)})">View</button>
+                            <button class="btn-edit" onclick="editOrder(${order.id || (orders.length - index)})">Edit</button>
+                        </div>
+                    </td>
+                `;
+                ordersTableBody.appendChild(row);
+            });
+        }
+
+        // Load user activity
+        function loadUserActivity() {
+            const activity = JSON.parse(localStorage.getItem('userActivity')) || [];
+            const activityTableBody = document.getElementById('activityTableBody');
+            const emptyActivity = document.getElementById('emptyActivity');
+
+            if (activity.length === 0) {
+                activityTableBody.innerHTML = '';
+                emptyActivity.style.display = 'block';
+                return;
+            }
+
+            emptyActivity.style.display = 'none';
+            activityTableBody.innerHTML = '';
+
+            activity.slice(-10).reverse().forEach(log => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${log.userId || 'Anonymous'}</td>
+                    <td>${log.action}</td>
+                    <td>${log.details}</td>
+                    <td>${new Date(log.timestamp).toLocaleString()}</td>
+                `;
+                activityTableBody.appendChild(row);
+            });
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const orders = JSON.parse(localStorage.getItem('coffeeOrders')) || [];
+            const activity = JSON.parse(localStorage.getItem('userActivity')) || [];
+            
+            // Calculate total orders
+            document.getElementById('totalOrders').textContent = orders.length;
+            
+            // Calculate total revenue
+            const totalRevenue = orders.reduce((sum, order) => sum + (order.total || 0), 0);
+            document.getElementById('totalRevenue').textContent = `$${totalRevenue.toFixed(2)}`;
+            
+            // Calculate unique customers
+            const uniqueCustomers = new Set(orders.map(order => order.customer || 'Guest')).size;
+            document.getElementById('totalCustomers').textContent = uniqueCustomers;
+            
+            // Products count is fixed
+            document.getElementById('totalProducts').textContent = '6';
+        }
+
+        // View order details
+        function viewOrder(orderId) {
+            const orders = JSON.parse(localStorage.getItem('coffeeOrders')) || [];
+            const order = orders.find(o => o.id === orderId);
+            
+            if (order) {
+                alert(`Order Details:\n\nID: #${order.id}\nCustomer: ${order.customer}\nItems: ${order.items ? order.items.length : 0}\nTotal: $${order.total ? order.total.toFixed(2) : '0.00'}\nStatus: ${order.status || 'Pending'}\nDate: ${order.date || 'N/A'}`);
+            }
+        }
+
+        // Edit order status
+        function editOrder(orderId) {
+            const orders = JSON.parse(localStorage.getItem('coffeeOrders')) || [];
+            const orderIndex = orders.findIndex(o => o.id === orderId);
+            
+            if (orderIndex !== -1) {
+                const newStatus = prompt('Enter new status (pending/completed/cancelled):', orders[orderIndex].status || 'pending');
+                
+                if (newStatus && ['pending', 'completed', 'cancelled'].includes(newStatus.toLowerCase())) {
+                    orders[orderIndex].status = newStatus.toLowerCase();
+                    localStorage.setItem('coffeeOrders', JSON.stringify(orders));
+                    loadOrders();
+                    updateStatistics();
+                }
+            }
+        }
+
+        // Refresh data
+        function refreshData() {
+            initializeDashboard();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+
+        // Auto-refresh every 30 seconds
+        setInterval(refreshData, 30000);
+    </script>
+</body>
+</html>

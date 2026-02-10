@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Console Coffee</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(255, 255, 255, 0.122), rgba(255, 255, 255, 0.048)), url('../image/home-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 2rem;
+        }
+        
+        .login-form {
+            background: rgba(255, 255, 255, 0);
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .login-form h2 {
+            text-align: center;
+            color: #d3ad7f;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+        
+        .login-form .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .login-form .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #d3ad7f;
+            font-weight: 600;
+        }
+        
+        .login-form .input-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .login-form .input-group input:focus {
+            outline: none;
+            border-color: #d3ad7f;
+            box-shadow: 0 0 10px rgba(211, 173, 127, 0.3);
+        }
+        
+        .login-form .btn {
+            width: 100%;
+            padding: 1rem;
+            background: #d3ad7f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .login-form .btn:hover {
+            background: #c19660;
+            transform: translateY(-2px);
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            background: rgba(231, 76, 60, 0.1);
+            display: none;
+        }
+        
+        .back-to-site {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .back-to-site a {
+            color: #d3ad7f;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .back-to-site a:hover {
+            color: #c19660;
+        }
+        
+        .admin-icon {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-icon i {
+            font-size: 4rem;
+            color: #d3ad7f;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-login-container">
+        <div class="login-form">
+            <div class="admin-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <h2>Admin Login</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <div id="errorMessage" class="error-message"></div>
+            </form>
+            <div class="back-to-site">
+                <a href="index.html">&larr; Back to Main Site</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Simple authentication (in production, use proper server-side authentication)
+            const validCredentials = {
+                'Admin': 'Admin123',
+                'Console': 'Coffee2024'
+            };
+            
+            if (validCredentials[username] && validCredentials[username] === password) {
+                // Store login session
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                sessionStorage.setItem('adminUser', username);
+                
+                // Redirect to dashboard
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                errorMessage.textContent = 'Invalid username or password';
+                errorMessage.style.display = 'block';
+                
+                // Hide error message after 3 seconds
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
+        });
+        
+        // Check if already logged in
+        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            window.location.href = 'admin-dashboard.html';
+        }
+    </script>
+</body>
+</html>

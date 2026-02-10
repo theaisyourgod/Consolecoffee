@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Order - Coffee</title>
+
+    <!-- Font Awesome CDN Link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Custom CSS File Link  -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            box-sizing: border-box;
+            /* margin-top: 70px; */
+            background-image: url(image/book-bg.jpg);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .order-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .cart-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .cart-items {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            gap: 1rem;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .cart-item-price {
+            color: #666;
+            margin: 0.5rem 0;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: #d3ad7f;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .quantity-btn:hover {
+            background: #b8935f;
+        }
+
+        .quantity {
+            font-size: 1.1rem;
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .item-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #d3ad7f;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .remove-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+
+        .remove-btn:hover {
+            background: #cc0000;
+        }
+
+        .cart-summary {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .summary-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #d3ad7f;
+            border-top: 2px solid #eee;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #d3ad7f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .checkout-btn:hover {
+            background: #b8935f;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-cart i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .back-to-menu {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .back-to-menu a {
+            color: #d3ad7f;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        .back-to-menu a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div id="menu-btn" class="fas fa-bars"></div>
+
+        <a href="index.html" class="logo">Console Coffee <i class="fas fa-mug-hot"></i></a>
+
+        <nav class="navbar">
+            <a href="index.html#home">home</a>
+            <a href="index.html#about">about</a>
+            <a href="index.html#menu">menu</a>
+            <a href="index.html#review">review</a>
+            <a href="index.html#book">book</a>
+            <a href="order.html" class="cart-link">
+                your order 
+                <span class="cart-count" style="background: #ff4444; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.8rem; margin-left: 5px;">0</span>
+            </a>
+        </nav>
+    </header>
+
+    <!-- ORDER PAGE -->
+    <section class="order-container" >
+        <div class="cart-header">
+            <h1 class="heading" style="margin-top: 80px;">your order <span>cart items</span></h1>
+        </div>
+
+        <div class="cart-items">
+            <div id="cart-content">
+                <!-- Cart items will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">$0.00</span>
+            </div>
+            <div class="summary-row">
+                <span>Tax (10%):</span>
+                <span id="tax">$0.00</span>
+            </div>
+            <div class="summary-row summary-total">
+                <span>Total:</span>
+                <span id="total">$0.00</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+
+        <div class="back-to-menu">
+            <a href="index.html#menu">← Back to Menu</a>
+        </div>
+    </section>
+
+    <!-- Custom JS File Link  -->
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
